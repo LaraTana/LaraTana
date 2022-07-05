@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "abb.h"
+
+
 //#include "fila.h"
 
 
@@ -17,7 +19,7 @@ int main(){
         scanf("%d", &resp);
         if(resp == 1){
             
-              system("clear");
+              system("cls");
               insert_dados();
               printf("\n\n");
 //-----------------------------------------------------------------------------------
@@ -26,11 +28,18 @@ int main(){
             //remover uma encomenda de livro da ABB (id)
             //para remover eu preciso:
             //1 - visualizar as encomendas (in_ordem)
+            
+            system("cls");
+            
+            printf("--------------------------------\n");
             in_ordem(raiz);
-            int x = -1;
+            
+            int x = 0;
             printf("qual id excluir: ");
             scanf("%d", &x);
-            remover_abb(x, raiz);
+            remover(raiz, x);
+            
+            
             //2 - verificar o usuario
             //printf(" Digite seu cpf:\n");
             //char cpf[100];

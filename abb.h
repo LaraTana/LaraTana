@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Identificador.h"
+
 typedef struct Vertice{
    
     //Dados iniciais da encomenda de um livro
@@ -18,24 +19,7 @@ VERTICE * raiz = NULL;
 
 
 
-void insert_dados(){
-    
-    printf("gerando id:\n");
-    int id_gerado = id();
-    printf("Digite o nome do aluno:\n");
-    char * nome = malloc(sizeof(char));
-    scanf(" %[^\n]s", nome);
-    //... matricula e descricao..*/
-    printf("matricula: \n");
-    int *matricula = malloc(sizeof(int));
-    scanf("%d", &matricula);
-    printf("Descrição: \n");
-    char * descricao = malloc(sizeof(char));
-    scanf(" %[^\n]s", descricao);
-    
-    add_abb(id_gerado,nome,matricula,descricao);
 
-}
 
 
 VERTICE* buscar(int id, VERTICE *aux){
@@ -104,52 +88,73 @@ void in_ordem(VERTICE *aux){
         in_ordem(aux->dir);
         }
 }
-
-/*void remover(int id, VERTICE * aux){
+void insert_dados(){
     
-    if(aux != NULL && aux->id == id){
-        raiz->dir->esq=raiz->esq;
-        raiz->esq->dir=raiz->dir;
-        free(raiz);
-    }else{
-        
-        if(aux == NULL){//arvore esta vazia
-            printf("Remocao invalida!\nPedido nao existente!");
-        }else{
-            if(id < aux->id){
-                remover(id, raiz->esq);
-            }else{
-                remover(id, raiz->dir);
-            }
-        }
-    }
-
-}*/
-void remover_abb(int id, VERTICE * raiz){
+    printf("gerando id:\n");
+    int id_gerado = identificador();
+    printf("Digite o nome do aluno:\n");
+    char * nome = malloc(sizeof(char));
+    scanf(" %[^\n]s", nome);
+    //... matricula e descricao..*/
+    printf("matricula: \n");
+    int *matricula = malloc(sizeof(int));
+    scanf("%d", &matricula);
+    printf("Descrição: \n");
+    char * descricao = malloc(sizeof(char));
+    scanf(" %[^\n]s", descricao);
     
-    if(raiz != NULL){
-        if(raiz->id == id){///Encontrou o pacote
-           raiz->dir->esq=raiz->esq;
-            raiz->esq->dir=raiz->dir;
-            free(raiz);
-        }else if(id < raiz->id){///O pacote procurado é menor
-            if(raiz->esq != NULL){
-                remover_abb(id, raiz->esq);
-            }else{
-                printf("Remocao invalida!\nPedido nao existente!");
-            }
-        }else if(id > raiz->id){///O pacote procurado é maior
-            if(raiz->dir != NULL){
-                remover_abb(id, raiz->dir);
-            }else{
-                printf("\nRemocao invalida!Pedido nao existente!");
-            }
-        }
-    }else{///A arvore está vazia
-        printf("Remocao invalida!\nArvore vazia");
-    }
+    add_abb(id_gerado,nome,matricula,descricao);
 
 }
+// função para remover nós da Árvore binária
+VERTICE* remover(VERTICE *raiz, int chave) {
+    if(raiz == NULL){
+        printf("id nao encontrado!\n");
+        return NULL;
+    } else { // procura o nó a remover
+        if(raiz->id == chave) {
+            // remove nós folhas (nós sem filhos)
+            if(raiz->esq == NULL && raiz->dir == NULL) {
+                free(raiz);
+                printf("Elemento folha removido: %d !\n", chave);
+                return NULL;
+            }
+            else{
+                // remover nós que possuem 2 filhos
+                if(raiz->esq != NULL && raiz->dir != NULL){
+                    VERTICE *aux = raiz->esq;
+                    while(aux->dir != NULL)
+                        aux = aux->dir;
+                    raiz->id = aux->id;
+                    aux->id = chave;
+                    printf("Elemento trocado: %d !\n", chave);
+                    raiz->esq = remover(raiz->esq, chave);
+                    return raiz;
+                }
+                else{
+                    // remover nós que possuem apenas 1 filho
+                    VERTICE *aux;
+                    if(raiz->esq != NULL)
+                        aux = raiz->esq;
+                    else
+                        aux = raiz->dir;
+                    free(raiz);
+                    printf("Elemento removido: %d !\n", chave);
+                    return aux;
+                }
+            }
+        } else {
+            if(chave < raiz->id)
+                raiz->esq = remover(raiz->esq, chave);
+            else
+                raiz->dir = remover(raiz->dir, chave);
+            return raiz;
+        }
+    }
+}
+
+
+
 
 
 
